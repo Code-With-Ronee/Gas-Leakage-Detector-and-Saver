@@ -1,0 +1,44 @@
+ #include <Servo.h>
+ int MQ6 = 3;// MQ-6 SENSOR  
+ int LPG_det; 
+ int Led = 12;
+ int Led2 = 8; 
+ long gas_lvl;
+ Servo myservo;
+ int pos = 0;
+ void setup() {  
+ 	Serial.begin(9600);  
+ 	myservo.attach(9); 
+ 	pinMode(MQ6, INPUT); 
+  	pinMode(Led, OUTPUT);
+  	pinMode(Led2, OUTPUT);
+ }  
+ void loop() {  
+ 	LPG_det = digitalRead(MQ6);  
+ 	gas_lvl= analogRead(A0);
+ 	delay(1000);
+ 	Serial.println("LPG Flag="); 
+ 	Serial.println(LPG_det);  
+ 	Serial.println("Analog Value");
+ 	Serial.println(gas_lvl);
+ 
+ 	if (gas_lvl >200) {  
+ 		Serial.println("LPG detected...");  
+ 		digitalWrite(Led, HIGH);
+ 		digitalWrite(Led2, LOW); 
+    		for (pos=0; pos<=180; pos+=1);
+    			myservo.write(pos);             
+    			delay(15);                       
+  
+  
+} 
+   
+ else  
+ {  
+ Serial.println("No LPG detected ");  
+ digitalWrite(Led, LOW);
+ digitalWrite(Led2, HIGH);
+ for (pos=180; pos>=0; pos-=1);
+    myservo.write(pos);  
+ }  
+ }  
